@@ -1,0 +1,66 @@
+---
+title: "Coding exercise GITHub"
+output: html_document
+---
+
+```{r}
+source("setup.R")
+```
+load data
+```{r}
+data("knz_bison")
+```
+
+1. 
+creating new column in bison data
+```{r}
+df <- knz_bison %>%
+  mutate(
+  animal_yob = as_date(aniaml_yob),
+rec_year = as_date(rec_year)
+  )
+```
+checking column
+```{r}
+str(df)
+```
+muate column anmial yob to rec year to get the age of observation
+```{r}
+df <- df %>%
+  mutate(
+    age = floor(time_length(interval(animal_yob, rec_year))))
+```
+
+```{r}
+print(df)
+```
+
+
+2. Function for filtering dataset weight threshold
+```{r}
+filter_weight_data <- knz_bison(
+  data_code = 2:5,
+  animal_sex = c("F", "M"),
+  animal_weight = c(500, 600, 700, 900, 1000),
+weight_threshold <- 750)
+```
+
+
+3. boxplot of weight distribution of male and female bison
+```{r}
+ggplot(knz_bison, aes(x = animal_sex, y = animal_weight, fill = animal_sex)) +
+  geom_boxplot() +
+  labs(title = "Weight Distribution by Bison sex",
+       x = "Sex",
+       y = "Weight") +
+  theme_minimal()
+```
+
+t-test to see if there is any significant difference bewteen male and female bisons.
+```{r}
+ttest_result <- t.test(animal_weight ~ animal_sex, data = knz_bison)
+```
+
+
+
+
